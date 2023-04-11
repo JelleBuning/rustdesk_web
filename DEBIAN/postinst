@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+if [ "$1" = configure ]; then
+
+	INITSYS=$(ls -al /proc/1/exe | awk -F' ' '{print $NF}' | awk -F'/' '{print $NF}')
+
+	if [ "systemd" == "$INITSYS" ]; then
+		if [ -e /etc/systemd/system/rustdesk.service ]; then
+			rm /etc/systemd/system/rustdesk.service
+		fi
+		version=$(python3 -V 2>&1 | grep -Po '(?<=Python )(.+)')
+		parsedVersion=$(echo "${version//./}")
+		if [[ "$parsedVersion" -gt "360" ]]; then
+			sudo -H pip3 install pynput
+		fi
+		cp /usr/share/rustdesk/files/systemd/rustdesk.service /etc/systemd/system/rustdesk.service
+		systemctl daemon-reload
+		systemctl enable rustdesk
+		systemctl start rustdesk
+	fi
+fi

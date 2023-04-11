@@ -1,0 +1,25 @@
+/target
+.vscode
+.idea
+.DS_Store
+src/ui/inline.rs
+extractor
+__pycache__
+src/version.rs
+*dmg
+*exe
+*tgz
+cert.pfx
+*.bak
+*png
+*svg
+*jpg
+sciter.dll
+**pdb
+src/bridge_generated.rs
+*deb
+rustdesk
+# appimage
+appimage/AppDir
+appimage/*.AppImage
+appimage/appimage-build
