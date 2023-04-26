@@ -11,7 +11,9 @@ import 'settings_page.dart';
 import 'scan_page.dart';
 
 class ConnectionPage extends StatefulWidget implements PageShape {
-  ConnectionPage({Key? key}) : super(key: key);
+  final String? id;
+  final String? password;
+  ConnectionPage({Key? key, this.id, this.password}) : super(key: key);
 
   @override
   final icon = Icon(Icons.connected_tv);
@@ -23,16 +25,22 @@ class ConnectionPage extends StatefulWidget implements PageShape {
   final appBarActions = !isAndroid ? <Widget>[WebMenu()] : <Widget>[];
 
   @override
-  _ConnectionPageState createState() => _ConnectionPageState();
+  _ConnectionPageState createState() => _ConnectionPageState(id, password);
 }
 
 class _ConnectionPageState extends State<ConnectionPage> {
+  final String? id;
+  final String? password;
+  _ConnectionPageState(this.id, this.password);
+
   final _idController = TextEditingController();
   var _updateUrl = '';
   var _menuPos;
 
+
   @override
   void initState() {
+    print("CONPAGE ${id}");
     super.initState();
     if (isAndroid) {
       Timer(Duration(seconds: 5), () {
@@ -44,6 +52,11 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
   @override
   Widget build(BuildContext context) {
+    if(id != null && id!.isNotEmpty){
+      print("trying to connect to: ${id}, ${password}");
+      connect(id as String);
+    }
+
     Provider.of<FfiModel>(context);
     if (_idController.text.isEmpty) _idController.text = FFI.getId();
     return SingleChildScrollView(
@@ -81,10 +94,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
         ),
       );
     } else {
+          print("HELLOOO");
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => RemotePage(id: id),
+          // TODO: remove as String
+          builder: (BuildContext context) => RemotePage(id: id, password: password,),
         ),
       );
     }
