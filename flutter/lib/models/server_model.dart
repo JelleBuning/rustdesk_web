@@ -192,7 +192,7 @@ class ServerModel with ChangeNotifier {
   Future<Null> startService() async {
     _isStart = true;
     notifyListeners();
-    FFI.ffiModel.updateEventListener("");
+    FFI.ffiModel.updateEventListener("", null);
     await FFI.invokeMethod("init_service");
     FFI.setByName("start_service");
     getIDPasswd();

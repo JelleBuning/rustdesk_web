@@ -100,7 +100,14 @@ void updatePasswordDialog() {
   });
 }
 
-void enterPasswordDialog(String id) {
+void enterPasswordDialog(String id, String? password) {
+  print('enter password ${password}');
+  if (password != null) {
+    FFI.login(password, false);
+    // showLoading(translate('Logging in...'));
+    return;
+  }
+
   final controller = TextEditingController();
   var remember = FFI.getByName('remember', id) == 'true';
   DialogManager.show((setState, close) {
@@ -139,7 +146,7 @@ void enterPasswordDialog(String id) {
             if (text == '') return;
             FFI.login(text, remember);
             close();
-            showLoading(translate('Logging in...'));
+            // showLoading(translate('Logging in...'));
           },
           child: Text(translate('OK')),
         ),
@@ -151,7 +158,7 @@ void enterPasswordDialog(String id) {
 void wrongPasswordDialog(String id) {
   DialogManager.show((setState, close) => CustomAlertDialog(
           title: Text(translate('Wrong Password')),
-          content: Text(translate('Do you want to enter again?')),
+          content: Text(translate('Do you want to enter rememberagain?')),
           actions: [
             TextButton(
               style: flatButtonStyle,
@@ -164,7 +171,8 @@ void wrongPasswordDialog(String id) {
             TextButton(
               style: flatButtonStyle,
               onPressed: () {
-                enterPasswordDialog(id);
+                print('enter pass');
+                enterPasswordDialog(id, null);
               },
               child: Text(translate('Retry')),
             ),

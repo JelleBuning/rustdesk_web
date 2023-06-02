@@ -355,7 +355,7 @@ export default class Connection {
       this._password = p;
       const challenge = this._hash?.challenge;
       p = hash([p, challenge!]);
-      this.msgbox("connecting", "Connecting...", "Logging in...");
+      // this.msgbox("connecting", "Connecting...", "Logging in...");
       this._sendLoginMessage(p);
     } else {
       let p = this._password;

@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _pages.add(ConnectionPage());
+    _pages.add(ConnectionPage(id: '', password: '',));
     if (isAndroid) {
       _pages.addAll([chatPage, ServerPage()]);
     }
@@ -78,7 +78,32 @@ class _HomePageState extends State<HomePage> {
 }
 
 class WebHomePage extends StatelessWidget {
-  final connectionPage = ConnectionPage();
+  final connectionPage = ConnectionPage(id: null, password: null);
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      backgroundColor: MyTheme.grayBg,
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("RustDesk" + (isWeb ? " (Beta) " : "")),
+        actions: connectionPage.appBarActions,
+      ),
+      body: connectionPage,
+    );
+  }
+}
+
+class PassArgumentsScreen extends StatelessWidget {
+  static const routeName = '/connect';
+  late var connectionPage;
+  late Map<String, String> queryParameters;
+  PassArgumentsScreen(Map<String, String> queryParameters){
+    this.queryParameters = queryParameters;
+    connectionPage = ConnectionPage(id: queryParameters["id"] as String, password: queryParameters["password"] as String,);
+  }
+
 
   @override
   Widget build(BuildContext context) {
