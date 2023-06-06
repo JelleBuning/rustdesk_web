@@ -48,7 +48,7 @@ if (app) {
     const id = document.querySelector('#id');
     localStorage.setItem('id', id.value);
     const key = document.querySelector('#key');
-    localStorage.setItem('key', "OvYPJS8I5xV+d6sx3a7Ce9TVakfKdT3Zy3T7C1jjx+a=");
+    localStorage.setItem('key', key.value);
     const func = async () => {
       const conn = globals.newConn();
       conn.setMsgbox(msgbox);

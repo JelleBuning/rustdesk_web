@@ -119,11 +119,11 @@ class FfiModel with ChangeNotifier {
     _permissions.clear();
   }
 
-  void updateEventListener(String peerId, String? password) {
+  void updateEventListener(String peerId, String? pw) {
     final void Function(Map<String, dynamic>) cb = (evt) {
       var name = evt['name'];
       if (name == 'msgbox') {
-        handleMsgBox(evt, peerId, password);
+        handleMsgBox(evt, peerId, pw);
       } else if (name == 'peer_info') {
         handlePeerInfo(evt);
       } else if (name == 'connection_ready') {
@@ -185,14 +185,14 @@ class FfiModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void handleMsgBox(Map<String, dynamic> evt, String id, String? password) {
+  void handleMsgBox(Map<String, dynamic> evt, String id, String? pw) {
     var type = evt['type'];
     var title = evt['title'];
     var text = evt['text'];
     if (type == 're-input-password') {
       wrongPasswordDialog(id);
     } else if (type == 'input-password') {
-      enterPasswordDialog(id, password);
+      enterPasswordDialog(id, pw);
     } else {
       var hasRetry = evt['hasRetry'] == 'true';
       showMsgBox(type, title, text, hasRetry);
@@ -205,7 +205,7 @@ class FfiModel with ChangeNotifier {
     if (hasRetry) {
       _timer = Timer(Duration(seconds: _reconnects), () {
         FFI.reconnect();
-        // showLoading(translate('Connecting...'));
+        showLoading(translate('Connecting...'));
       });
       _reconnects *= 2;
     } else {
@@ -783,6 +783,7 @@ class FFI {
   }
 
   static void login(String password, bool remember) {
+    // TODO: decrypt
     setByName(
         'login',
         json.encode({

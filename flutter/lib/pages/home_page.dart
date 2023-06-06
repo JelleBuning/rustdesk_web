@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _pages.add(ConnectionPage(id: '', password: '',));
+    _pages.add(ConnectionPage());
     if (isAndroid) {
       _pages.addAll([chatPage, ServerPage()]);
     }
@@ -78,11 +78,10 @@ class _HomePageState extends State<HomePage> {
 }
 
 class WebHomePage extends StatelessWidget {
-  final connectionPage = ConnectionPage(id: null, password: null);
+  final connectionPage = ConnectionPage();
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: MyTheme.grayBg,
       appBar: AppBar(
@@ -101,9 +100,8 @@ class PassArgumentsScreen extends StatelessWidget {
   late Map<String, String> queryParameters;
   PassArgumentsScreen(Map<String, String> queryParameters){
     this.queryParameters = queryParameters;
-    connectionPage = ConnectionPage(id: queryParameters["id"] as String, password: queryParameters["password"] as String,);
+    connectionPage = ConnectionPage(id: queryParameters['id'], pw: queryParameters['pw']);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +109,7 @@ class PassArgumentsScreen extends StatelessWidget {
       backgroundColor: MyTheme.grayBg,
       appBar: AppBar(
         centerTitle: true,
-        title: Text("RustDesk" + (isWeb ? " (Beta) " : "")),
+        title: Text("RustDesk"),
         actions: connectionPage.appBarActions,
       ),
       body: connectionPage,

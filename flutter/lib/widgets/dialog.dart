@@ -101,8 +101,7 @@ void updatePasswordDialog() {
 }
 
 void enterPasswordDialog(String id, String? password) {
-  print('enter password ${password}');
-  if (password != null) {
+  if(password != null){
     FFI.login(password, false);
     // showLoading(translate('Logging in...'));
     return;
@@ -146,7 +145,7 @@ void enterPasswordDialog(String id, String? password) {
             if (text == '') return;
             FFI.login(text, remember);
             close();
-            // showLoading(translate('Logging in...'));
+            showLoading(translate('Logging in...'));
           },
           child: Text(translate('OK')),
         ),
@@ -158,7 +157,7 @@ void enterPasswordDialog(String id, String? password) {
 void wrongPasswordDialog(String id) {
   DialogManager.show((setState, close) => CustomAlertDialog(
           title: Text(translate('Wrong Password')),
-          content: Text(translate('Do you want to enter rememberagain?')),
+          content: Text(translate('Do you want to enter again?')),
           actions: [
             TextButton(
               style: flatButtonStyle,
@@ -171,7 +170,6 @@ void wrongPasswordDialog(String id) {
             TextButton(
               style: flatButtonStyle,
               onPressed: () {
-                print('enter pass');
                 enterPasswordDialog(id, null);
               },
               child: Text(translate('Retry')),
