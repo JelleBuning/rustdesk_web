@@ -783,7 +783,6 @@ class FFI {
   }
 
   static void login(String password, bool remember) {
-    // TODO: decrypt
     setByName(
         'login',
         json.encode({

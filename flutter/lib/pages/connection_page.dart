@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 import '../common.dart';
 import '../models/model.dart';
+import '../util/decrypt.dart';
 import 'home_page.dart';
 import 'remote_page.dart';
 import 'settings_page.dart';
@@ -120,6 +121,8 @@ class _ConnectionPageState extends State<ConnectionPage> {
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold))));
   }
+
+  
 
   Widget getSearchBarUI() {
     var w = Padding(

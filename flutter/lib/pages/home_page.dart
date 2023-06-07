@@ -3,6 +3,7 @@ import 'package:flutter_hbb/pages/chat_page.dart';
 import 'package:flutter_hbb/pages/server_page.dart';
 import 'package:flutter_hbb/pages/settings_page.dart';
 import '../common.dart';
+import '../util/decrypt.dart';
 import '../widgets/overlay.dart';
 import 'connection_page.dart';
 
@@ -100,7 +101,18 @@ class PassArgumentsScreen extends StatelessWidget {
   late Map<String, String> queryParameters;
   PassArgumentsScreen(Map<String, String> queryParameters){
     this.queryParameters = queryParameters;
-    connectionPage = ConnectionPage(id: queryParameters['id'], pw: queryParameters['pw']);
+    if(queryParameters['id'] != null && queryParameters['id'] != null){
+      var decryptedId = decrypt(queryParameters['id']);
+      var decryptedPw = decrypt(queryParameters['pw']);
+      // connectionPage = Column(
+      //   crossAxisAlignment: CrossAxisAlignment.start,
+      //   children: [
+      //     Text(decryptedId == null ? 'decrypt failed' : decryptedId),
+      //     Text(decryptedPw == null ? 'decrypt failed' : decryptedPw),
+      //   ],
+      // );
+      connectionPage = ConnectionPage(id: decryptedId, pw: decryptedPw);
+    }
   }
 
   @override
@@ -110,6 +122,7 @@ class PassArgumentsScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text("RustDesk"),
+        // actions: <Widget>[WebMenu()],
         actions: connectionPage.appBarActions,
       ),
       body: connectionPage,
