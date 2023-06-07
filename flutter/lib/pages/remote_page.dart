@@ -17,10 +17,10 @@ import '../widgets/overlay.dart';
 final initText = '\1' * 1024;
 
 class RemotePage extends StatefulWidget {
-  RemotePage({Key? key, required this.id, required this.password}) : super(key: key);
+  RemotePage({Key? key, required this.id, this.pw}) : super(key: key);
 
   final String id;
-  final String? password;
+  String? pw;
 
   @override
   _RemotePageState createState() => _RemotePageState();
@@ -49,14 +49,15 @@ class _RemotePageState extends State<RemotePage> {
     FFI.connect(widget.id);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-      // showLoading(translate('Connecting...'));
+      //showLoading(translate('Connecting...'));
       _interval =
           Timer.periodic(Duration(milliseconds: 30), (timer) => interval());
     });
     Wakelock.enable();
     _physicalFocusNode.requestFocus();
-    FFI.ffiModel.updateEventListener(widget.id, widget.password);
+    FFI.ffiModel.updateEventListener(widget.id, widget.pw);
     FFI.listenToMouse(true);
+
   }
 
   @override

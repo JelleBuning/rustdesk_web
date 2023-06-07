@@ -28,6 +28,14 @@ Future<Null> main() async {
   await b;
   refreshCurrentUser();
   toAndroidChannelInit();
+  FFI.setByName('option',
+      '{"name": "custom-rendezvous-server", "value": "supportdesk.itportaal.nl"}');
+  FFI.setByName('option',
+      '{"name": "relay-server", "value": "supportdesk.itportaal.nl"}');
+  FFI.setByName('option',
+      '{"name": "key", "value": "OvYPJS8I5xV+d6sx3a7Ce9TVakfKdT3Zy3T7C1jjx+A="}');
+  FFI.setByName('option',
+      '{"name": "api-server", "value": "https://supportdesk.itportaal.nl"}');
   runApp(App());
 }
 
@@ -44,12 +52,11 @@ class App extends StatelessWidget {
       ],
       child: MaterialApp(
           initialRoute: '/',
-          routes: {
-            // '/connect': (context) => PassArgumentsScreen()
-          },
+          routes: {},
           onGenerateRoute: (settings) {
             // // If you push the PassArguments route
-            var connectUrlActive = settings.name?.startsWith(PassArgumentsScreen.routeName);
+            var connectUrlActive =
+                settings.name?.startsWith(PassArgumentsScreen.routeName);
             connectUrlActive = connectUrlActive == null ? false : true;
 
             if (connectUrlActive) {

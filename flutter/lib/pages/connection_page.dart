@@ -5,15 +5,17 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 import '../common.dart';
 import '../models/model.dart';
+import '../util/decrypt.dart';
 import 'home_page.dart';
 import 'remote_page.dart';
 import 'settings_page.dart';
 import 'scan_page.dart';
 
 class ConnectionPage extends StatefulWidget implements PageShape {
-  final String? id;
-  final String? password;
-  ConnectionPage({Key? key, this.id, this.password}) : super(key: key);
+  ConnectionPage({Key? key, this.id, this.pw}) : super(key: key);
+
+  String? id;
+  String? pw;
 
   @override
   final icon = Icon(Icons.connected_tv);
@@ -25,22 +27,16 @@ class ConnectionPage extends StatefulWidget implements PageShape {
   final appBarActions = !isAndroid ? <Widget>[WebMenu()] : <Widget>[];
 
   @override
-  _ConnectionPageState createState() => _ConnectionPageState(id, password);
+  _ConnectionPageState createState() => _ConnectionPageState();
 }
 
 class _ConnectionPageState extends State<ConnectionPage> {
-  final String? id;
-  final String? password;
-  _ConnectionPageState(this.id, this.password);
-
   final _idController = TextEditingController();
   var _updateUrl = '';
   var _menuPos;
 
-
   @override
   void initState() {
-    print("CONPAGE ${id}");
     super.initState();
     if (isAndroid) {
       Timer(Duration(seconds: 5), () {
@@ -48,15 +44,14 @@ class _ConnectionPageState extends State<ConnectionPage> {
         if (_updateUrl.isNotEmpty) setState(() {});
       });
     }
+
+    if(widget.id != null && widget.pw != null){
+      connect(widget.id!, widget.pw!);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if(id != null && id!.isNotEmpty){
-      print("trying to connect to: ${id}, ${password}");
-      connect(id as String);
-    }
-
     Provider.of<FfiModel>(context);
     if (_idController.text.isEmpty) _idController.text = FFI.getId();
     return SingleChildScrollView(
@@ -75,10 +70,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
   void onConnect() {
     var id = _idController.text.trim();
-    connect(id);
+    connect(id, null);
   }
 
-  void connect(String id, {bool isFileTransfer = false}) async {
+  void connect(String id, String? pw, {bool isFileTransfer = false}) async {
     if (id == '') return;
     id = id.replaceAll(' ', '');
     if (isFileTransfer) {
@@ -94,12 +89,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
         ),
       );
     } else {
-          print("HELLOOO");
       Navigator.push(
         context,
         MaterialPageRoute(
-          // TODO: remove as String
-          builder: (BuildContext context) => RemotePage(id: id, password: password,),
+          builder: (BuildContext context) => RemotePage(id: id, pw: pw),
         ),
       );
     }
@@ -128,6 +121,8 @@ class _ConnectionPageState extends State<ConnectionPage> {
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold))));
   }
+
+  
 
   Widget getSearchBarUI() {
     var w = Padding(
@@ -226,8 +221,8 @@ class _ConnectionPageState extends State<ConnectionPage> {
           width: width,
           child: Card(
               child: GestureDetector(
-                  onTap: !isDesktop ? () => connect('${p.id}') : null,
-                  onDoubleTap: isDesktop ? () => connect('${p.id}') : null,
+                  onTap: !isDesktop ? () => connect('${p.id}', null) : null,
+                  onDoubleTap: isDesktop ? () => connect('${p.id}', null) : null,
                   onLongPressStart: (details) {
                     final x = details.globalPosition.dx;
                     final y = details.globalPosition.dy;
@@ -281,7 +276,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
         removePreference(id);
       }();
     } else if (value == 'file') {
-      connect(id, isFileTransfer: true);
+      connect(id, null, isFileTransfer: true);
     }
   }
 }
